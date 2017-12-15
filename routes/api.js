@@ -9,7 +9,12 @@ router.get('/users', function(req,res) {
 
 //POST add a new user to database
 router.post('/users', function(req,res) {
-  res.send({type: 'POST'});
+  console.log(req.body);
+  res.send({
+    type: 'POST',
+    email: req.body.email,
+    first_name: req.body.first_name
+  });
 });
 
 //GET a specific user in database
