@@ -12,6 +12,11 @@ router.post('/users', function(req,res) {
   res.send({type: 'POST'});
 });
 
+//GET a specific user in database
+router.get('/users/:id', function(req,res) {
+  res.send({type: 'GETID'});
+});
+
 //PUT update a user in the database
 router.put('/users/:id', function(req,res) {
   res.send({type: 'PUT'});
