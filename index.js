@@ -1,11 +1,14 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+
+dotenv.config();
 // Set Up express app
 const app = express();
 
 // Connect to mongodb
-mongoose.connect('mongodb://localhost/apithevelops',{ useMongoClient: true });
+mongoose.connect(process.env.MONGODB_PATH,{ useMongoClient: true });
 
 mongoose.Promise = global.Promise;
 

@@ -1,11 +1,14 @@
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 
 // Create users Schema and model
 const UserSchema = new Schema({
   email: {
     type: String,
     required: [true, 'Email field is required'],
+    lowercase: true,
     unique: true
   },
   first_name: {
@@ -27,5 +30,32 @@ const UserSchema = new Schema({
   }
 });
 
+UserSchema.methods.generateToken = function generateToken() {
+  return jwt.sign({
+     email: this.email
+    },
+    process.env.TOKEN
+  );
+};
+
+UserSchema.methods.isValidPassword = function isValidPassword(password) {
+  if (bcrypt.compareSync(password, this.password)) {
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+UserSchema.methods.tojson = function tojson() {
+  return {
+    email: this.email,
+    token: this.generateToken()
+  }
+};
+
+
 const User = mongoose.model('user', UserSchema);
+
+
 module.exports = User;
