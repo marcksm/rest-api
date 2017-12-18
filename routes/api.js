@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user')
+const bcrypt = require('bcrypt')
 
 router.post('/authenticate', function(req,res,next) {
   const {user_auth} = req.body;
@@ -32,17 +33,33 @@ router.post('/users', function(req,res,next) {
 //GET a specific user in database
 router.get('/users/:id', function(req,res,next) {
   User.findOne({_id: req.params.id}).then(function (user) {
-    res.send(user);
+    res.json({user: user.tojson()})
   }).catch(next);
 });
 
 //PUT update a user in the database
 router.put('/users/:id', function(req,res,next) {
+
+  console.log(req.body);
+  console.log(req.body.email);
+  console.log(req.body.password)
+  if (req.body.password) {
+    var pass = bcrypt.hashSync(req.body.password, 10)
+    User.findByIdAndUpdate({_id: req.params.id}, { password: pass}).then(function(){
+
+        User.findOne({_id: req.params.id}).then(function (user) {
+          res.json({ success: true })
+        });
+    }).catch(next);
+  }
+  else {
   User.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
+
       User.findOne({_id: req.params.id}).then(function (user) {
-        res.send(user);
+        res.json({ success: true })
       });
   }).catch(next);
+ }
 });
 
 //DELETE delete a user from the database
