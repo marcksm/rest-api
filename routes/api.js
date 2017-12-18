@@ -24,9 +24,12 @@ router.get('/users', function(req,res,next) {
 
 //POST add a new user to database
 router.post('/users', function(req,res,next) {
-  var user = new User(req.body);
+  console.log(req.body)
+  var pre = req.body
+  pre.password = bcrypt.hashSync(req.body.password, 10);
+  var user = new User(pre);
   user.save().then(function(user){
-    res.send(user);
+    res.send({user: user.tojson()});
   }).catch(next);
 });
 
@@ -40,21 +43,23 @@ router.get('/users/:id', function(req,res,next) {
 //PUT update a user in the database
 router.put('/users/:id', function(req,res,next) {
 
-  console.log(req.body);
-  console.log(req.body.email);
-  console.log(req.body.password)
   if (req.body.password) {
-    var pass = bcrypt.hashSync(req.body.password, 10)
-    User.findByIdAndUpdate({_id: req.params.id}, { password: pass}).then(function(){
-
-        User.findOne({_id: req.params.id}).then(function (user) {
-          res.json({ success: true })
-        });
-    }).catch(next);
+    var pass = bcrypt.hashSync(req.body.password, 10);
+    var userss = User.findOne({_id: req.params.id});
+    userss.then(function (user){
+      if (bcrypt.compareSync(req.body.old_password, user.password)){
+        User.findOneAndUpdate({_id: req.params.id},{$set: {password: pass}}).then(function(){
+            User.findOne({_id: req.params.id}).then(function (user) {
+              res.json({ success: true })
+            });
+        }).catch(next);
+      } else {
+        res.status(404).json ({ success: false })
+    }
+  });
   }
   else {
   User.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
-
       User.findOne({_id: req.params.id}).then(function (user) {
         res.json({ success: true })
       });
