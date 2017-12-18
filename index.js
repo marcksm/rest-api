@@ -10,7 +10,7 @@ const app = express();
 app.use(cors());
 
 // Connect to mongodb
-mongoose.connect(process.env.MONGODB_PATH,{ useMongoClient: true });
+mongoose.connect(process.env.MONGODB_PATH_ONLINE,{ useMongoClient: true });
 
 mongoose.Promise = global.Promise;
 

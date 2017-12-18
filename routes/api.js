@@ -24,7 +24,6 @@ router.get('/users', function(req,res,next) {
 
 //POST add a new user to database
 router.post('/users', function(req,res,next) {
-  console.log(req.body)
   var pre = req.body
   pre.password = bcrypt.hashSync(req.body.password, 10);
   var user = new User(pre);
@@ -70,7 +69,7 @@ router.put('/users/:id', function(req,res,next) {
 //DELETE delete a user from the database
 router.delete('/users/:id', function(req,res,next) {
   User.findByIdAndRemove({_id: req.params.id}).then(function(err, user){
-      res.send(user);
+      res.json({ success: true });
   }).catch(next);
 });
 
