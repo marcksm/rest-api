@@ -8,7 +8,6 @@ var total = parseInt(process.argv[2]) || 50
 var reset = false || !!process.argv[3]
 var successEntries = 0;
 
-//OPCAO DE ARGV PARA MUDAR O PATH E RESETAR O DB
 dotenv.config();
 
 faker.locale = "pt_BR"
