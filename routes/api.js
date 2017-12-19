@@ -7,8 +7,9 @@ const expressJoi = require('express-joi-validator');
 const Validator = require('../validation/user')
 
 
-router.post('/authenticate', function(req,res,next) {
-  const {user_auth} = req.body;
+
+router.post('/authenticate',expressJoi(Validator.Login), function(req,res,next) {
+  const user_auth = req.body;
   User.findOne({ email: user_auth.email}).then(function (user) {
     if (user && user.isValidPassword(user_auth.password)) {
       res.json({user: user.tojson()});

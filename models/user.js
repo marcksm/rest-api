@@ -47,6 +47,8 @@ UserSchema.methods.isValidPassword = function isValidPassword(password) {
   }
 }
 
+
+
 UserSchema.methods.tojson = function tojson() {
   return {
     id: this._id,

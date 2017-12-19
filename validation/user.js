@@ -12,6 +12,12 @@ module.exports = {
           password_confirmation:Joi.string().required().label('Confirmation Password')
         }
   },
+  Login: {
+      body: {
+          email: Joi.string().email().required().label('User Email'),
+          password: Joi.string().required().label('Password')
+        }
+  },
   User: {
     params: {
      id: Joi.string().required().label('id')
