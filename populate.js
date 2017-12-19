@@ -8,36 +8,64 @@ var total = parseInt(process.argv[2]) || 50
 var reset = false || !!process.argv[3]
 var successEntries = 0;
 
-
+//OPCAO DE ARGV PARA MUDAR O PATH E RESETAR O DB
 dotenv.config();
-var db = mongoose.connect(process.env.MONGODB_PATH_LOCAL,{ useMongoClient: true }, function() {
-  if ((reset && process.argv[3] == 'r') || process.argv[2] == 'r' ){
-    mongoose.connection.db.dropDatabase();
-    console.log('Mongodb collection dropped (reset)');
-  }
-  console.log('Populating...');
-  if (process.argv[2] == parseInt('0') || process.argv[2] == 'r' ) {
-    console.log('KAI')
-    total = -2
-    successEntries= 50
-  }
-  async.whilst(function () { return successEntries < total;},
-      function (next) {
-        User.create(sample())
-        .then(res => { successEntries++; next(); console.log(res)})
-        .catch(err => {})
-      },
-  function (after) {
-    mongoose.connection.close(function () {
-         console.log('Done!')
-         console.log('Mongodb connection disconnected');
-         console.log('Exiting script');
-       });
-  });
-});
 
 faker.locale = "pt_BR"
 mongoose.Promise = global.Promise;
+
+var db = mongoose.connect(process.env.MONGODB_PATH_ONLINE,{ useMongoClient: true }, function() {
+  if ((parseInt(process.argv[2]) > 0 && process.argv[3] == 'r') || !(!!process.argv[2])){
+    console.log('You can check avaiable commands running: node populate.js h')
+    console.log('Reseting db')
+    console.log('Mongodb collection dropped (reset)');
+    mongoose.connection.db.dropDatabase(function (){ pop()});
+  }
+  else if (process.argv[2] == 'r' || parseInt(process.argv[2]) == 0) {
+      console.log('Mongodb collection dropped (reset)');
+      mongoose.connection.db.dropDatabase(function (){finishConnection()});
+  }
+  else if ((parseInt(process.argv[2]) && !(!!process.argv[3]))) {
+    pop();
+  }
+  else if (process.argv[2] == 'h') {
+    str = 'Avaliable populate commands:\n' +
+     '\'node populate.js <X>    -- to include X new entries in db \'\n' +
+     '\'node populate.js <X> r  -- to reset and populate with X new entries in db \'\n' +
+     '\'node populate.js r      -- to reset db\''
+      console.log(str);
+      finishConnection();
+  }
+  else {
+    str = 'Wrong arguments, please run\n' +
+     '\'node populate.js <X>    -- to include X new entries in db \'\n' +
+     '\'node populate.js <X> r  -- to reset and populate with X new entries in db \'\n' +
+     '\'node populate.js r      -- to reset db\''
+    console.log(str);
+    finishConnection();
+  }
+});
+
+
+function pop () {
+  console.log('Populating...')
+  async.whilst(function () { return successEntries < total;},
+      function (next) {
+        User.create(sample())
+        .then(res => { successEntries++; next();})
+        .catch(err => {})
+      },
+  function (after) {
+    finishConnection()
+  });
+}
+
+function finishConnection() {
+  mongoose.connection.close(function () {
+       console.log('Mongodb connection disconnected');
+       console.log('Exiting script');
+     });
+}
 
 function sample () {
   return {
