@@ -5,23 +5,30 @@ const bcrypt = require('bcrypt')
 const Joi = require('joi');
 const expressJoi = require('express-joi-validator');
 const Validator = require('../validation/user')
+var jwt = require('jsonwebtoken');
 
 
 
-router.post('/authenticate',expressJoi(Validator.Login), function(req,res,next) {
-  const user_auth = req.body;
-  User.findOne({ email: user_auth.email}).then(function (user) {
-    if (user && user.isValidPassword(user_auth.password)) {
-      res.json({user: user.tojson()});
-    }
-    else {
-      res.status(400).json({errors: {global: "Email or password invalid"}});
-    }
-  });
-});
+// router.post('/authenticate', function(req,res,next) {
+//   const {user_auth} = req.body;
+//   User.findOne({ email: user_auth.email}).then(function (user) {
+//     if (user && user.isValidPassword(user_auth.password)) {
+//       res.json({user: user.tojson()});
+//     }
+//     else {
+//       res.status(400).json({errors: {global: "Email or password invalid"}});
+//     }
+//   });
+// });
+//
+// //GET list of users from the database
+// router.get('/token', function(req,res,next) {
+//     res.send({token: jwt.sign({email: 'this.email'}, process.env.TOKEN)})
+// });
 
 //GET list of users from the database
 router.get('/users', function(req,res,next) {
+//  console.log(jwt.sign({email: 'this.email'}, process.env.TOKEN));
   User.find({}).then(function(users){
     res.send(users);
   }).catch(next);
@@ -54,7 +61,8 @@ router.put('/users/:id', expressJoi(Validator.User), function(req,res,next) {
 });
 
 //PUT update for edit user field in react app
-router.put('/users/:id/edit', expressJoi(Validator.EditUser), function(req,res,next) {
+router.put('/users/:id/edit',expressJoi(Validator.EditUser), function(req,res,next) {
+  console.log(req.body)
   User.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
       User.findOne({_id: req.params.id}).then(function (user) {
         res.json({ success: true })
@@ -64,6 +72,7 @@ router.put('/users/:id/edit', expressJoi(Validator.EditUser), function(req,res,n
 
 //PUT update specific for reset_password field in react app
 router.put('/users/:id/reset_password', expressJoi(Validator.ResetPassword), function(req,res,next) {
+
     var pass = bcrypt.hashSync(req.body.password, 10);
     var userss = User.findOne({_id: req.params.id});
     userss.then(function (user) {

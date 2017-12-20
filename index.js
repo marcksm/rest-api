@@ -6,21 +6,28 @@ const cors = require('cors');
 const Joi = require('joi');
 const expressJoi = require('express-joi-validator');
 const port = process.env.port || 4000
+const basicAuth = require('./middleware/auth')
+
+
+
 dotenv.config();
 // Set Up express app
 const app = express();
 
-app.use(cors());
 
+app.use(cors());
 // Connect to mongodb
 mongoose.connect(process.env.MONGODB_PATH_LOCAL,{ useMongoClient: true });
 
 mongoose.Promise = global.Promise;
 
+
 app.use(bodyParser.json());
 
 // Initilize routes
-app.use('/api',require('./routes/api'));
+app.use('/api', require('./routes/api_public'));
+app.use(basicAuth.api);
+app.use('/api', require('./routes/api'));
 
 //Error handling
 app.use(function(err, req, res, next){
