@@ -13,7 +13,7 @@ dotenv.config();
 faker.locale = "pt_BR"
 mongoose.Promise = global.Promise;
 
-var db = mongoose.connect(process.env.MONGODB_PATH_ONLINE,{ useMongoClient: true }, function() {
+var db = mongoose.connect(process.env.MONGODB_PATH_LOCAL,{ useMongoClient: true }, function() {
   if ((parseInt(process.argv[2]) > 0 && process.argv[3] == 'r') || !(!!process.argv[2])){
     console.log('You can check avaiable commands running: node populate.js h')
     console.log('Reseting db')

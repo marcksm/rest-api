@@ -7,6 +7,18 @@ const expressJoi = require('express-joi-validator');
 const Validator = require('../validation/user')
 var jwt = require('jsonwebtoken');
 
+router.post('/authenticate', function(req,res,next) {
+  const user_auth = req.body;
+  User.findOne({ email: req.body.email}).then(function (user) {
+    if (user && user.isValidPassword(req.body.password)) {
+      res.json({user: user.tojson()});
+    }
+    else {
+      res.status(400).json({errors: {global: "Email or password invalid"}});
+    }
+  });
+});
+
 //GET list of users from the database
 router.get('/users', function(req,res,next) {
   User.find({}).then(function(users){
@@ -16,6 +28,7 @@ router.get('/users', function(req,res,next) {
 
 //POST add a new user to database
 router.post('/users', expressJoi(Validator.SignUp), function(req, res, next) {
+
   var pre = req.body
   pre.password = bcrypt.hashSync(req.body.password, 10);
   var user = new User(pre);
