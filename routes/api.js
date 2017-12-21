@@ -9,6 +9,7 @@ var jwt = require('jsonwebtoken');
 
 router.post('/authenticate', function(req,res,next) {
   const user_auth = req.body;
+  console.log(req.body)
   User.findOne({ email: req.body.email}).then(function (user) {
     if (user && user.isValidPassword(req.body.password)) {
       res.json({user: user.tojson()});
@@ -82,8 +83,13 @@ router.put('/users/:id/reset_password', expressJoi(Validator.ResetPassword), fun
 
 //DELETE delete a user from the database
 router.delete('/users/:id', expressJoi(Validator.GetUser), function(req,res,next) {
-  User.findByIdAndRemove({_id: req.params.id}).then(function(err, user){
-      res.json({ success: true });
+  User.findByIdAndRemove({_id: req.params.id}, function(err, user){
+      if (user) {
+        res.json({ success: true });
+      }
+      else {
+        res.json({ success: false });
+      }
   }).catch(next);
 });
 

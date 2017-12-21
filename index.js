@@ -7,12 +7,13 @@ const Joi = require('joi');
 const expressJoi = require('express-joi-validator');
 const port = process.env.port || 4000
 const basicAuth = require('./middleware/auth')
-
+const path = require('path');
 
 
 dotenv.config();
 // Set Up express app
 const app = express();
+app.use(express.static('public'))
 
 
 app.use(cors());
@@ -29,15 +30,17 @@ app.use('/', require('./routes/api_public'),function(req, res, next) {
 
   if (req.url.startsWith('/api')) return next();
   else {
-    res.status(404).send('404 NOT FOUND')
+    //res.status(404).send('404 NOT FOUND')
+    //res.status(404).render('404.html');
+   res.sendFile(path.join(__dirname+'/err404.html'));
   }
 });
 
 app.use(basicAuth.api);
 app.use('/api', require('./routes/api'), function (req, res, next){
 
-  res.status(404).send('404 NOT FOUND')
- //res.render('404.jade');
+//  res.status(404).send('404 NOT FOUND')
+ res.sendFile(path.join(__dirname+'/err404.html'));
 });
 
 //Error handling

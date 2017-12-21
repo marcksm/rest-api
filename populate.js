@@ -52,7 +52,7 @@ function pop () {
       function (next) {
         User.create(sample())
         .then(res => { successEntries++; next();})
-        .catch(err => {})
+        .catch(err => {next();} )
       },
   function (after) {
     finishConnection()
@@ -72,6 +72,6 @@ function sample () {
     first_name: faker.name.firstName(),
     last_name: faker.name.lastName(),
     personal_phone: faker.phone.phoneNumberFormat(),
-    password: bcrypt.hashSync(faker.internet.password(), 10)
+    password: bcrypt.hashSync('111111', 10)
   }
 };

@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <head>
+        <meta charset="utf-8">
+        <title>REST API</title>
+        <link href="/styles.css" rel="stylesheet" />
+    </head>
+    <body class="" >
+      <link href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.9/semantic.css" rel="stylesheet">
+
+      <script type="text/javascript">
+      var getUrl = window.location;
+      var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+      var authUrl = baseUrl + 'auth'
+      var numUrl = baseUrl + 'db_users'
+      function test() {
+        return $.getJSON(authUrl);
+      }
+
+      $.when(test()).then(function (data) {
+        var str1 = 'User: ' + data.user
+        var str2 = 'Pass: ' + data.pass
+        $('.results1').html(str1);
+        $('.results2').html(str2);
+      });
+      function getNumberUsers() {
+        return $.getJSON(numUrl);
+      }
+      $.when(getNumberUsers()).then(function (data) {
+        var str = data.users + ' Users in database'
+        $('.users').html(str);
+      });
+
+      </script>
+
+      <div class="header">
+        <div id="homepage">
+          <h1 class="ui massive message black">theVelops Application
+            <div align="right"><button class="ui button active" onclick="window.location.href='https://github.com/marcksm/rest-api'"><i class="file icon"></i><br></button></div>
+         <div align="left"><h5><i class="address card outline icon large"></i>
+                <span class="users"></span></h5>
+            </div>
+          </h1>
+        </div>
+      </div>
+      <div class="ui icon message">
+  <i class="unlock icon"></i>
+  <div class="content">
+    <div class="header">
+      Authenticaiton to use API
+    </div>
+    <div>This API uses HTTP basic authentication, in order to test the API, use the following credentials:<hr></div>
+    <div class="results1"></div>
+    <div class="results2"></div>
+  </div>
+</div>
+<div class="ui message">
+  <div class="header">
+    <p><h2>GET /db_users</h2></p>
+    <ul class="list">
+       <li>Return a JSON containing the amount of users registered in database</li>
+    </ul>
+  </div>
+</div>
+<div class="ui message">
+  <div class="header">
+    <p><h2>GET /auth</h2></p>
+    <ul class="list">
+      <li>Return a JSON user information to HTTP basic authentication</li>
+    </ul>
+  </div>
+</div>
+    <div class="ui message">
+      <div class="header">
+        <p><h2>GET /api/users</h2></p>
+        <ul class="list">
+           <li>Return a JSON with all users from database with their information</li>
+
+        </ul>
+      </div>
+    </div>
+    <div class="ui message">
+      <div class="header">
+        <p><h2>GET /api/users/:id</h2></p>
+        <ul class="list">
+           <li>Return a JSON of a especific user from database with their information</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ui message">
+      <div class="header">
+        <p><h2>POST /api/users</h2></p>
+        <ul class="list">
+           <li>Insert a new user in database</li><br><br>
+           Body request example JSON:
+
+             <h5><div class="ui raised segment">{<br>
+        &ensp; &ensp;  "email": "john@thevelops.com",<br>
+        &ensp; &ensp;  "first_name": "John",<br>
+        &ensp; &ensp;  "last_name": "Doe",<br>
+        &ensp; &ensp;  "personal_phone": "(11) 984219204",<br>
+        &ensp; &ensp;  "password": "111111",<br>
+        &ensp; &ensp;  "password_confirmation": "111111"<br>
+             }
+           </div></h5>
+        </ul>
+      </div>
+    </div>
+    <div class="ui message">
+      <div class="header">
+        <p><h2>POST /api/authenticate</h2></p>
+        <ul class="list">
+           <li>Authenticate a user given a email and a password</li><br>
+           <li>Return success in case the information given is correct. </li>
+           Body request example JSON:
+
+             <h5><div class="ui raised segment">{<br>
+        &ensp; &ensp;  "email": "john@thevelops.com",<br>
+        &ensp; &ensp;  "password": "111111"<br>
+             }
+           </div></h5>
+        </ul>
+      </div>
+    </div>
+    <div class="ui message">
+      <div class="header">
+        <p><h2>PUT /api/users/:id/edit</h2></p>
+        <ul class="list">
+           <li>Edit user information and put in database</li><br><br>
+           Body request example JSON:
+
+             <h5><div class="ui raised segment">{<br>
+        &ensp; &ensp;  email: 'john@thevelops.com',<br>
+        &ensp; &ensp;  first_name: 'John',<br>
+        &ensp; &ensp;  last_name: 'Doe',<br>
+        &ensp; &ensp;  personal_phone: '(11) 984219204',<br>
+             }
+           </div></h5>
+        </ul>
+      </div>
+    </div>
+    <div class="ui message">
+      <div class="header">
+        <p><h2>PUT /api/users/:id/reset_password</h2></p>
+        <ul class="list">
+           <li>Reset user password and put in the database</li><br><br>
+           Body request example JSON:
+
+             <h5><div class="ui raised segment">{<br>
+        &ensp; &ensp;  "old_password": '111111',<br>
+        &ensp; &ensp;  "password": '222222',<br>
+        &ensp; &ensp;  "password_confirmation": '222222'<br>
+             }
+           </div></h5>
+        </ul>
+      </div>
+    </div>
+    <div class="ui message">
+      <div class="header">
+        <p><h2>DELETE /api/users/:id/</h2></p>
+        <ul class="list">
+           <li>Delete a user in the database</li>
+            <li>Return JSON success true case has deleted or false otherwise</li>
+        </ul>
+      </div>
+    </div>
+    <div class="header">
+      <a class="mail outline icon" href="mailto:someone@example.com?Subject=Hello%20again"></a>
+      <h1 class="ui massive message black">Developed by<br> Marcos Vinicius
+        <div align="right"><i class="github icon" onclick="window.location.href='https://github.com/marcksm/'"></i><br></div>
+
+        <div align="left"><h5><i class="address card outline icon large"></i>
+            <span class="users"></span></h5>
+        </div>
+      </h1>
+
+      </div>
+    </div>
+
+    </body>
+</html>
