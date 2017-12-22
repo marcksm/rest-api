@@ -9,25 +9,36 @@ const port = process.env.port || 4000;
 const basicAuth = require('./middleware/auth');
 const path = require('path');
 
-/** This is a description of the foo function. */
-
+/**
+ Configurating enviorment
+ */
 dotenv.config();
-// Set Up express app
+
+/**
+ Set up express js
+ */
 const app = express();
 app.use(express.static('public'));
 
-
+/**
+ Middleware to use CORS in HTTP requests
+ */
 app.use(cors());
 
-// Connect to mongodb
+/**
+	Connect to mongodb
+ */
 mongoose.connect(process.env.NODE_ENV == 'dev' ? (process.env.MONGODB_PATH_LOCAL):(process.env.MONGODB_PATH_ONLINE),{ useMongoClient: true });
-
 mongoose.Promise = global.Promise;
 
-
+/**
+ Middleware to parse response to json
+ */
 app.use(bodyParser.json());
 
-// Initilize routes
+/**
+ Initilize routes without HTTP basic authentication
+ */
 app.use('/', require('./routes/api_public'),function(req, res, next) {
 	if (req.url.startsWith('/api')) return next();
 	else {
@@ -35,13 +46,21 @@ app.use('/', require('./routes/api_public'),function(req, res, next) {
 	}
 });
 
-
+/**
+ Set up HTTP basic authentication middleware
+ */
 app.use(basicAuth.api);
+
+/**
+ Initilize routes with HTTP basic authentication
+ */
 app.use('/api', require('./routes/api'), function (req, res, next){
 	res.sendFile(path.join(__dirname+'/err404.html'));
 });
 
-//Error handling
+/**
+	Error handling
+ */
 app.use(function(err, req, res, next){
 	if (err.isBoom) {
 		return res.status(err.output.statusCode).json(err.output.payload);
@@ -49,7 +68,9 @@ app.use(function(err, req, res, next){
 	 res.status(400).json({err: err.message });
 });
 
-// Listen for request
+/**
+ Listen for request
+ */
 app.listen(port, function() {
 	process.env.NODE_ENV == 'dev' ? (str1 = process.env.MONGODB_PATH_LOCAL)	:(str1 = process.env.MONGODB_PATH_ONLINE);
 	str = 'API on ' + 'http://localhost:'+ port;

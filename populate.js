@@ -8,11 +8,20 @@ var total = parseInt(process.argv[2]) || 50;
 var reset = false || !!process.argv[3];
 var successEntries = 0;
 
+/**
+ Initilize enviorments configuration
+ */
 dotenv.config();
 
+/**
+ Initilize faker configutions
+ */
 faker.locale = "pt_BR";
 mongoose.Promise = global.Promise;
 
+/**
+ Connect to mongodb ONLINE BY DEFAULT check .env files
+ */
 var db = mongoose.connect(process.env.MONGODB_PATH_ONLINE,{ useMongoClient: true }, function() {
 	if ((parseInt(process.argv[2]) > 0 && process.argv[3] == 'r') || !(!!process.argv[2])){
 		console.log('You can check avaiable commands running: node populate.js h');
@@ -49,7 +58,9 @@ var db = mongoose.connect(process.env.MONGODB_PATH_ONLINE,{ useMongoClient: true
 	}
 });
 
-
+/**
+ Function to populate database
+ */
 function pop () {
 	console.log('Populating...');
 	async.whilst(function () { return successEntries < total;},
@@ -63,6 +74,9 @@ function pop () {
 		});
 }
 
+/**
+ Function to end mongodb connection
+ */
 function finishConnection() {
 	mongoose.connection.close(function () {
 			 console.log('Mongodb connection disconnected');
@@ -70,6 +84,9 @@ function finishConnection() {
 		 });
 }
 
+/**
+ Function that returns a user sample with fake info
+ */
 function sample () {
 	return {
 		email: faker.internet.email(),

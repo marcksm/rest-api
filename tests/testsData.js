@@ -1,4 +1,6 @@
-
+/**
+ User data for tests
+ */
 const user1 = {
 	signup_wrong_email: {
 		email: 'joane@thevelops.com',
