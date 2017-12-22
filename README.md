@@ -39,3 +39,11 @@ For production only (Mongo DB in mLab online):
 ```
 npm start
 ```
+## Running tests via NPM
+
+by default is set to use mLab mongo database, so 
+
+Inside the rest-api folder
+```
+npm test
+```
