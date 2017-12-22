@@ -1,6 +1,9 @@
 const Joi = require('joi');
 const expressJoi = require('express-joi-validator');
 
+/**
+  Valition fields for routes
+*/
 module.exports = {
   SignUp: {
       body: {

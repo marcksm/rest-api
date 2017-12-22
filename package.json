@@ -4,8 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "start": "node index.js"
+    "test": "eslint . && jest tests/",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "dev": "NODE_ENV=dev node index.js",
+    "start": "NODE_ENV=production node index.js"
   },
   "keywords": [],
   "author": "",
@@ -28,7 +31,9 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.6.1",
+    "eslint": "^4.13.1",
     "jest": "^22.0.3",
+    "jsdoc": "^3.5.5",
     "nodemon": "^1.13.2",
     "superagent": "^3.8.2",
     "supertest": "^3.0.0"

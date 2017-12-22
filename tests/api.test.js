@@ -1,8 +1,8 @@
 const request = require('supertest');
-const app = require('./index')
-const basicAuth = require('./middleware/auth')
+const app = require('../index')
+const basicAuth = require('../middleware/auth')
 const dummy = require('./testsData');
-const User = require('./models/user')
+const User = require('../models/user')
 
 
 

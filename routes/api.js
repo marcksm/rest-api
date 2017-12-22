@@ -7,6 +7,9 @@ const expressJoi = require('express-joi-validator');
 const Validator = require('../validation/user')
 var jwt = require('jsonwebtoken');
 
+/**
+GET /auth route, returns the enviorments user and pass for HTTP basicAuth
+ */
 router.post('/authenticate', function(req,res,next) {
   const user_auth = req.body;
   console.log(req.body)
@@ -20,14 +23,18 @@ router.post('/authenticate', function(req,res,next) {
   });
 });
 
-//GET list of users from the database
+/**
+GET /users route, returns a json list of users
+ */
 router.get('/users', function(req,res,next) {
   User.find({}).then(function(users){
     res.send(users);
   }).catch(next);
 });
 
-//POST add a new user to database
+/**
+POST /users add a new user to database
+*/
 router.post('/users', expressJoi(Validator.SignUp), function(req, res, next) {
 
   var pre = req.body
@@ -38,14 +45,18 @@ router.post('/users', expressJoi(Validator.SignUp), function(req, res, next) {
   }).catch(next);
 });
 
-//GET a specific user in database
+/**
+GET /users/:id gets a specific user in database
+*/
 router.get('/users/:id', expressJoi(Validator.GetUser), function(req, res, next) {
   User.findOne({_id: req.params.id}).then(function (user) {
     res.json({user: user.tojson()})
   }).catch(next);
 });
 
-//PUT update a user in the database
+/**
+PUT /users/:id update a user in the database
+*/
 router.put('/users/:id', expressJoi(Validator.User), function(req,res,next) {
   User.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
       User.findOne({_id: req.params.id}).then(function (user) {
@@ -54,7 +65,9 @@ router.put('/users/:id', expressJoi(Validator.User), function(req,res,next) {
   }).catch(next);
 });
 
-//PUT update for edit user field in react app
+/**
+PUT /users/:id/edit update for edit user field in react app
+*/
 router.put('/users/:id/edit',expressJoi(Validator.EditUser), function(req,res,next) {
   User.findByIdAndUpdate({_id: req.params.id}, req.body).then(function(){
       User.findOne({_id: req.params.id}).then(function (user) {
@@ -63,7 +76,9 @@ router.put('/users/:id/edit',expressJoi(Validator.EditUser), function(req,res,ne
   }).catch(next);
 });
 
-//PUT update specific for reset_password field in react app
+/**
+PUT update specific for reset_password field in react app
+*/
 router.put('/users/:id/reset_password', expressJoi(Validator.ResetPassword), function(req,res,next) {
     var pass = bcrypt.hashSync(req.body.password, 10);
     var userss = User.findOne({_id: req.params.id});
@@ -81,7 +96,9 @@ router.put('/users/:id/reset_password', expressJoi(Validator.ResetPassword), fun
   });
 });
 
-//DELETE delete a user from the database
+/**
+DELETE delete a user from the database
+*/
 router.delete('/users/:id', expressJoi(Validator.GetUser), function(req,res,next) {
   User.findByIdAndRemove({_id: req.params.id}, function(err, user){
       if (user) {

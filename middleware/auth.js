@@ -1,5 +1,8 @@
 var auth = require('basic-auth');
 
+/**
+ Check if Authorization header is correct with enviorments credentials
+ */
 function api(req, res, next) {
   var user = auth(req);
 
@@ -12,7 +15,9 @@ function api(req, res, next) {
    next();
   }
 }
-
+/**
+ Generates a HTTP basic auth with enviorments credentials in base64 to header
+ */
 function hashAuthhttp() {
   var username = process.env.API_USER;
   var password = process.env.API_PASS;

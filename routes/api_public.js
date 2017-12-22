@@ -8,18 +8,25 @@ const Validator = require('../validation/user')
 var jwt = require('jsonwebtoken');
 const path = require('path');
 
-//GET list of users from the database
+/**
+GET /auth route, returns the enviorments user and pass for HTTP basicAuth
+*/
 router.get('/auth', function(req,res,next) {
     res.send({user: process.env.API_USER, pass: process.env.API_PASS})
 });
 
+/**
+GET /db_users route, returns the number of users registered in connnected mongodb
+*/
 router.get('/db_users', function(req,res,next) {
   User.count({}, function( err, count){
   res.send({users: count})
   });
 });
 
-//GET list of users from the database
+/**
+GET / index page of API
+*/
 router.get('/', function(req,res,next) {
 
   res.sendFile(path.join(__dirname+'/root.html'));
