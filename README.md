@@ -23,7 +23,7 @@ https://app.swaggerhub.com/apis/marcos-application/RESTfulAPI/1.0.0#/
 
 ## Demo:
 
-Check demo deployed in Google Cloud Computer Engine of the API on the link below:
+Check out demo deployed in Google Cloud Computer Engine of the API on the link below:
 
 http://35.227.122.182:4000
 
@@ -38,7 +38,7 @@ http://35.227.122.182:4000
 * Mongo DB set up and running (for local only)
 * npm
 
-## Installing localy via NPM
+## Installing locally via NPM
 
 Clone this repository
 
@@ -48,7 +48,7 @@ git clone https://github.com/marcksm/rest-api.git
 cd rest-api
 npm install
 ```
-## Running localy via NPM
+## Running locally via NPM
 
 Inside the rest-api folder
 For development only (Mongo DB must be running locale) :
