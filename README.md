@@ -20,7 +20,7 @@ You can check the Swagger documentation of the API:
  
 https://app.swaggerhub.com/apis/marcos-application/RESTfulAPI/1.0.0#/
 
-You can check the code documentation of the API created using JSDoc:
+You can check the code documentation created using JSDoc:
 
 in /out/index.html
 
