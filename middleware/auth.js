@@ -1,7 +1,10 @@
+/** @module Middleware Authentication */
+
 var auth = require('basic-auth');
 
 /**
  Check if Authorization header is correct with enviorments credentials
+ @function
  */
 function api(req, res, next) {
 	var user = auth(req);
@@ -17,6 +20,7 @@ function api(req, res, next) {
 }
 /**
  Generates a HTTP basic auth with enviorments credentials in base64 to header
+ @function
  */
 function hashAuthhttp() {
 	var username = process.env.API_USER;

@@ -1,3 +1,4 @@
+/** @module API routes public */
 const express = require('express');
 const router = express.Router();
 const User = require('../models/user');
@@ -9,6 +10,10 @@ var jwt = require('jsonwebtoken');
 const path = require('path');
 
 /**
+@function
+@name GET /auth
+@type json
+@description
 GET /auth route, returns the enviorments user and pass for HTTP basicAuth
 */
 router.get('/auth', function(req,res,next) {
@@ -16,6 +21,10 @@ router.get('/auth', function(req,res,next) {
 });
 
 /**
+@function
+@name GET /db_users
+@type json
+@description
 GET /db_users route, returns the number of users registered in connnected mongodb
 */
 router.get('/db_users', function(req,res,next) {
@@ -25,6 +34,9 @@ router.get('/db_users', function(req,res,next) {
 });
 
 /**
+@function
+@name GET /
+@description
 GET / index page of API
 */
 router.get('/', function(req,res,next) {
